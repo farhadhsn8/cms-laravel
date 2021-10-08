@@ -9,11 +9,54 @@
 
                 <form class="sign-page__form" action="{{route('register.store')}}" method="post">
                         @csrf
-                        <input type="text" name="name" class="text text--right" placeholder="نام  و نام خانوادگی">
-                        <input type="text" name="mobile" class="text text--left" placeholder="شماره موبایل">
-                        <input type="text" name="email" class="text text--left" placeholder="ایمیل">
-                        <input type="password" name="password" class="text text--left" placeholder="رمز عبور">
-                        <input type="password" name="password_confirmation" class="text text--left" placeholder="تکرار رمز عبور">
+                    <div>
+                        <input type="text" name="name" class="text text--right" placeholder="نام و نام خانوادگی" />
+                        @error('name')
+                        <p style="margin-bottom: 1rem;
+                                color: #D8000C;
+                                text-align: right;"
+                        >
+                            {{ $message }}
+                        </p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <input type="text" name="mobile" class="text text--left" placeholder="شماره موبایل" />
+                        @error('mobile')
+                        <p style="margin-bottom: 1rem;
+                                color: #D8000C;
+                                text-align: right;"
+                        >
+                            {{ $message }}
+                        </p>
+                        @enderror
+                    </div>
+                    <div>
+                        <input type="text" name="email" class="text text--left" placeholder="ایمیل" />
+                        @error('email')
+                        <p style="margin-bottom: 1rem;
+                                color: #D8000C;
+                                text-align: right;"
+                        >
+                            {{ $message }}
+                        </p>
+                        @enderror
+                    </div>
+                    <div>
+                        <input type="password" name="password" class="text text--left" placeholder="رمز عبور" />
+                        @error('password')
+                        <p style="margin-bottom: 1rem;
+                                color: #D8000C;
+                                text-align: right;"
+                        >
+                            {{ $message }}
+                        </p>
+                        @enderror
+                    </div>
+                    <div>
+                        <input type="password" name="password_confirmation" class="text text--left" placeholder="تکرار رمز عبور" />
+                    </div>
 
 
                         <button class="btn btn--blue btn--shadow-blue width-100 mb-10" type="submit">ثبت نام</button>
