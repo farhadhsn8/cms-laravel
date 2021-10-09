@@ -37,10 +37,17 @@
                     <div class="c-header__button-search "></div>
                     <div class="c-header__button-nav"></div>
                 </div>
+                @guest
                 <div class="c-button__login-regsiter">
                     <div><a class="c-button__link c-button--login" href="{{ route('login') }}">ورود</a></div>
                     <div><a class="c-button__link c-button--register" href="{{ route('register') }}">ثبت نام</a></div>
                 </div>
+                @endguest
+                @auth
+                    <span>
+                        {{auth()->user()->name}}
+                    </span>
+                @endauth
             </div>
         </div>
     </div>
