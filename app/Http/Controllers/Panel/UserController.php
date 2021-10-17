@@ -6,22 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
     public function index()
     {
-        return view('panel.users.index');
+        $users = User::all();
+        return view('panel.users.index')->with('users',$users);
     }
 
     public function create()
     {
         return view('panel.users.create');
-    }
-
-    public function edit($id)
-    {
-        return view('panel.users.edit');
     }
 
     public function store(Request $request)
@@ -40,4 +37,27 @@ class UserController extends Controller
 
         return redirect()->route('users.index');
     }
+
+    public function edit(User $user)
+    {
+       // $user = User::findOrFail($id);
+        return view('panel.users.edit')->with('user',$user);
+    }
+
+    public function update(Request $request , User $user)
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'mobile' => ['required', 'string', 'max:11' ,'min:11' ,Rule::unique('users')->ignore($user->id)],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'role' => ['required', 'max:255'],
+        ]);
+
+        $data = $request->only(['name' , 'mobile' , 'email' , 'role']);
+        $user->update($data);
+
+        return redirect()->route('users.index');
+    }
+
+
 }

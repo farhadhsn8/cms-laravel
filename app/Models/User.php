@@ -54,4 +54,9 @@ class User extends Authenticatable
             return 'نویسنده';
 
     }
+
+    public function getJalaliDate()
+    {
+        return verta($this->created_at)->format('Y-m-d');
+    }
 }
