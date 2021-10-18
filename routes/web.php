@@ -30,6 +30,6 @@ Route::get('/profile', function () {
     return 'profile';
 })->name('profile');
 
-Route::resource('/panel/users' , UserController::class)->except(['show']);
+Route::resource('/panel/users' , UserController::class)->except(['show'])->middleware('auth');
 
 require __DIR__.'/auth.php';

@@ -41,8 +41,14 @@
                     <td>{{$user->getRoleInFarsi()}}</td>
                     <td>{{$user->getJalaliDate()}}</td>
                     <td>
-                        <a href="" class="item-delete mlg-15" title="حذف"></a>
+                        @if($user->id !== auth()->user()->id)
+                        <a href="{{route('users.destroy',$user->id)}}" class="item-delete mlg-15" onclick="destroyUser(event , {{$user->id}})" title="حذف"></a>
+                        @endif
                         <a href="{{route('users.edit',$user->id)}}" class="item-edit" title="ویرایش"></a>
+                        <form action="{{route('users.destroy',$user->id)}}" method="POST" id="destroy-user-{{$user->id}}">
+                            @csrf
+                            @method('delete')
+                        </form>
                     </td>
                 </tr>
                 @endforeach
@@ -50,4 +56,12 @@
             </table>
         </div>
     </div>
+    <x-slot name="scripts">
+        <script>
+            function destroyUser(event , id){
+                event.preventDefault();
+                document.getElementById('destroy-user-'+id).submit();
+            }
+        </script>
+    </x-slot>
 </x-panel-layout>
