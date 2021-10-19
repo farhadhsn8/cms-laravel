@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Panel\User\CreateUserRequest;
+use App\Http\Requests\Panel\User\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -21,16 +23,10 @@ class UserController extends Controller
         return view('panel.users.create');
     }
 
-    public function store(Request $request)
+    public function store(CreateUserRequest  $request)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'mobile' => ['required', 'string', 'max:11' ,'min:11' ,'unique:users'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'role' => ['required', 'max:255'],
-        ]);
-
-        $data = $request->only(['name' , 'mobile' , 'email' , 'role']);
+        //validation in request class
+        $data = $request->validated();
         $data['password'] = Hash::make('password');
 //        dd($data);
         User::create($data);
@@ -44,16 +40,10 @@ class UserController extends Controller
         return view('panel.users.edit')->with('user',$user);
     }
 
-    public function update(Request $request , User $user)
+    public function update(UpdateUserRequest $request , User $user)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'mobile' => ['required', 'string', 'max:11' ,'min:11' ,Rule::unique('users')->ignore($user->id)],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-            'role' => ['required', 'max:255'],
-        ]);
-
-        $data = $request->only(['name' , 'mobile' , 'email' , 'role']);
+        //validation in request class
+        $data = $request->validated();
         $user->update($data);
 
         return redirect()->route('users.index');
