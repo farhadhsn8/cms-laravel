@@ -11,7 +11,9 @@ class CategoryController extends Controller
 
     public function index()
     {
-        return view('panel.categories.index');
+        $categories = Category::paginate(15);
+        $parent_categories = Category::where('category_id',null)->get();
+        return view('panel.categories.index')->with('categories',$categories)->with('parent_categories',$parent_categories);
     }
 
     /**
@@ -32,7 +34,17 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => ['required' , 'string' , 'max:255'],
+            'slug' => ['required' , 'string' , 'max:255' , 'unique:categories'],
+            'category_id' => ['nullable' , 'exists:categories,id' , 'max:255']
+        ]);
+
+        Category::create(
+            $request->only(['name' , 'slug' , 'category_id'])
+        );
+        session()->flash('status' , 'دسته بندی با موفقیت ایجاد شد !');
+        return redirect()->route('categories.index');
     }
 
     /**
