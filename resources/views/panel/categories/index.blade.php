@@ -2,6 +2,9 @@
     <x-slot name="title">
         - مدیریت دسته بندی ها
     </x-slot>
+    <x-slot name="styles">
+        <link rel="stylesheet" href="{{ asset('blog/css/style.css') }}">
+    </x-slot>
     <div class="breadcrumb">
         <ul>
             <li><a href="{{ route('dashboard') }}">پیشخوان</a></li>
@@ -12,7 +15,7 @@
         <div class="row no-gutters  ">
             <div class="col-8 margin-left-10 margin-bottom-15 border-radius-3">
                 <p class="box__title">دسته بندی ها</p>
-                <div class="table__box">
+                <div class="table__box bg--white">
                     <table class="table">
                         <thead role="rowgroup">
                         <tr role="row" class="title-row">
@@ -30,16 +33,25 @@
                             <td>{{++$i}}</td>
                             <td>{{$category->name}}</td>
                             <td>{{$category->slug}}</td>
-                            <td>{{$category->category_id}}</td>
+                            @if( $category->parent)
+                                 <td>{{$category->parent->name}}</td>
+                            @else
+                                <td>ندارد</td>
+                            @endif
                             <td>
-                                <a href="" class="item-delete mlg-15" title="حذف"></a>
+                                <a href="" class="item-delete mlg-15" onclick="destroyCategory(event , {{$category->id}})" title="حذف"></a>
                                 <a href="edit-category.html" class="item-edit " title="ویرایش"></a>
+                                <form action="{{route('categories.destroy' , $category->id)}}"  method="POST" id="destroy-category-{{$category->id}}">
+                                    @csrf
+                                    @method('delete')
+                                </form>
                             </td>
                         </tr>
                         @endforeach
 
                         </tbody>
                     </table>
+                    {{$categories->links()}}
                 </div>
             </div>
             <div class="col-4 bg-white">
@@ -69,4 +81,25 @@
             </div>
         </div>
     </div>
+    <x-slot name="scripts">
+
+        <script>
+            function destroyCategory(event, id) {
+                event.preventDefault();
+                Swal.fire({
+                    title: 'ایا مطمئن هستید این دسته بندی را میخواهید حذف کنید؟',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: 'rgb(221, 51, 51)',
+                    cancelButtonColor: 'rgb(48, 133, 214)',
+                    confirmButtonText: 'بله حذف کن!',
+                    cancelButtonText: 'کنسل'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById(`destroy-category-${id}`).submit()
+                    }
+                })
+            }
+        </script>
+    </x-slot>
 </x-panel-layout>

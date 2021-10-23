@@ -65,7 +65,7 @@
             function destroyUser(event, id) {
                 event.preventDefault();
                 Swal.fire({
-                    title: 'ایا مطمئن هستید این کار را میخواهید حذف کنید؟',
+                    title: 'ایا مطمئن هستید این کاربر را میخواهید حذف کنید؟',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: 'rgb(221, 51, 51)',
